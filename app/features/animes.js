@@ -32,6 +32,9 @@ export const CallApi = ({ endpoint, page, setLoading }) => {
             } if (endpoint === "search") {
                 setAnime(animesResponse.data.search)
                 setLoading(false)
+            } if (endpoint === "genres") {
+                setAnime(animesResponse.data.genres)
+                setLoading(false)
             }
             setLoading(false)
         } catch (error) {

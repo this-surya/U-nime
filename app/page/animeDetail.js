@@ -2,7 +2,7 @@ export default function AnimeDetail({animesDetail}){
   console.log(animesDetail);
     return(
       <div className="mb-5 w-full flex flex-wrap justify-center">
-        <h1 className=" mb-5 bg-blue-800 text-white w-full text-xl p-3 w-full">{animesDetail.anime_detail.title}</h1>
+        <h1 className=" mb-5 bg-red-900 text-white w-full text-xl p-3 w-full">{animesDetail.anime_detail.title}</h1>
          <img className="h-96 mr-10" src={animesDetail.anime_detail.thumb} />
           <ul className="w-96">
             {animesDetail.anime_detail.detail.map((detail) => {

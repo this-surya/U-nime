@@ -19,11 +19,12 @@ import Jumbotron from "./page/jumbotron";
 // import Pagination from "./page/pagination";
 import Footer from "./page/footer";
 
+import Header from  "./componen/header";
+
 export default function Home() {
 
   const [endpoint, setEndpoint] = useState('ongoing');
   const [page, setPage] = useState('1');
-  const [slug, setSlug] = useState('');
   const [loading, setLoading] = useState(true)
 
 
@@ -32,29 +33,24 @@ export default function Home() {
 
 
   const { data } = CallApi({ endpoint, page, setLoading });
-  const { data : completed } = CallApi({endpoint: 'completed', page: 1, setLoading});
+  const { data : completed } = CallApi({endpoint: 'completed', page: '1', setLoading});
+  const { data : genres } = CallApi({endpoint: 'genres', page: '', setLoading});
 
-  console.log(completed);
-
-
-  // if(loading){
-  //   console.log('Mengambil data...')
-  // }else{
-  //   console.log(data);
-  // }
 
   //bagian home
   return (
-    <div className="flex flex-wrap justify-center">
+    <div>
       <Navbar setEndpoint={setEndpoint} setPage={setPage} setLoading={setLoading}/>
 
-        {loading ?
-        <BlankCard/>
+      <Page completed = {completed} data={data} endpoint={endpoint} setEndpoint={setEndpoint} setPage={setPage} loading={loading} setLoading={setLoading} genres={genres}/>
+        {/* {loading ?
+        <Container>
+          {row}
+        </Container>
           :
           <>
-          <Page completed = {completed} data={data} endpoint={endpoint} setEndpoint={setEndpoint} setPage={setPage} setLoading={setLoading}/>
           </>
-        }
+        } */}
 
 
 
@@ -65,28 +61,25 @@ export default function Home() {
 
 }
 
-function BlankCard(){
-  return(
-    <> 
-          <div className="w-40 h-60 m-5 bg-white">
-            <h1></h1>
-          </div>
-          <div className="w-40 h-60 m-5 bg-white">
-            <h1></h1>
-          </div>
-          <div className="w-40 h-60 m-5 bg-white">
-            <h1></h1>
-          </div>
-          <div className="w-40 h-60 m-5 bg-white">
-            <h1></h1>
-          </div>
-          <div className="w-40 h-60 m-5 bg-white">
-            <h1></h1>
-          </div>
-        </>
-  )
+
+function GenreList({genres}){
+   return(
+    <div className="w-60 sticky top-0 scrollbar scrollbar-thumb-rounded-full scrollbar-track-rounded-full overflow-y-scroll h-screen">
+    <h1 className="sticky bg-red-900 p-5 font-black text-white top-0">Genre List</h1>
+
+    <ul className="bg-white">
+      {genres.map((genre) =>{
+        return(
+
+          <li className="p-3">{genre.genre}</li>
+        )
+      })}
+    </ul>
+    </div>
+   )
 }
-function Page({ endpoint, data, setEndpoint, setPage, setLoading, completed }) {
+
+function Page({ endpoint, data, setEndpoint, setPage, setLoading, completed, genres, loading }) {
   return (
     <>
       {/* menampilkan anime list */}
@@ -94,20 +87,19 @@ function Page({ endpoint, data, setEndpoint, setPage, setLoading, completed }) {
       <>
 
       <Jumbotron/>
-      <Container>
 
-        <h1 className="text-white font-black text-xl w-full bg-red-900 py-5 text-center">Completed</h1>
+      <div className="flex">
+        <GenreList genres={genres} />
+        <Container>
 
-        <Content data={data} endpoint={endpoint} setEndpoint={setEndpoint} setPage={setPage} setLoading={setLoading}/>
+          <Header judul='Ongoing' />
+          <Content data={data} endpoint={endpoint} setEndpoint={setEndpoint} setPage={setPage} loading={loading} setLoading={setLoading}/>
 
-      </Container>
+          <Header judul='Completed' />
 
-      <Container>
-
-        <h1 className="text-white font-black text-xl w-full bg-red-900 py-5 text-center">Completed</h1>
-
-        <Content data={completed} endpoint={'completed'} setEndpoint={setEndpoint} setPage={setPage} setLoading={setLoading}/>
-      </Container>
+        <Content data={completed} endpoint={'completed'} setEndpoint={setEndpoint} setPage={setPage} loading={loading} setLoading={setLoading}/>
+        </Container>
+      </div>
 
 
 
@@ -135,7 +127,7 @@ function Page({ endpoint, data, setEndpoint, setPage, setLoading, completed }) {
 }
 function Container({ children }) {
   return (
-    <div className="anime text-white flex items-center flex-wrap justify-center w-full min-h-screen  mb-20">
+    <div className="anime w-5/6 text-white flex items-center flex-wrap justify-center w-full min-h-screen">
       {children}
     </div>
   )
