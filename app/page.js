@@ -1,133 +1,104 @@
-'use client'
+import { Response } from "./features/animes";
+import  { 
+   SideBar, 
+  Jumbotron, Content,  Header, Cardxl, 
+  Pagination} from "./componen/component";
+// import { useEffect, useState } from "react";
 
-import { useEffect, useState } from "react";
-import { axiosInstace } from "./lib/axios";
-import { CallApi } from "./features/animes";
-import {
-  useQueries,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider
-} from "react-query";
+export default async function Home() {
 
 
-import Content from "./page/content";
-import Navbar from "./page/navbar";
-import AnimeDetail from "./page/animeDetail";
-import Jumbotron from "./page/jumbotron";
-// import Pagination from "./page/pagination";
-import Footer from "./page/footer";
+  const animeGenre = await Response("genres")
+  const animeOngoing = await Response("ongoing/1")
+  const animeCompleted = await Response("completed/1")
+  const animeAction = await Response("genres/action/1");
 
-import Header from  "./componen/header";
-
-export default function Home() {
-
-  const [endpoint, setEndpoint] = useState('ongoing');
-  const [page, setPage] = useState('1');
-  const [loading, setLoading] = useState(true)
+  // const [animeGenre, setAnimeGenre] = useState([])
+  // const [animeOngoing, setAnimeOngoing] = useState([])
+  // const [animeCompleted, setAnimeCompleted] = useState([])
+  // const [animeAction, setAnimeAction] = useState([]);
 
 
-  //request data ke api
+  // useEffect(() => {
+  //   async function getGenre(){
+  //    try{
+  //     const result = await Response("genres")
+  //     setAnimeGenre(result);
+  //    }catch(e){
+  //     console.log(e)
+  //    }
+  //   }
+  //   getGenre()
+  // }, [])
 
+  // useEffect(() =>{
 
+  //   async function getAnimeOngoing(){
 
-  const { data } = CallApi({ endpoint, page, setLoading });
-  const { data : completed } = CallApi({endpoint: 'completed', page: '1', setLoading});
-  const { data : genres } = CallApi({endpoint: 'genres', page: '', setLoading});
+  //     try{
+  //       const result = await Response('ongoing/1')
+  //       setAnimeOngoing(result)
+  //     }catch(e){
+  //       console.log(e)
+  //     }
+  //   }
+
+  //   getAnimeOngoing()
+  // }, [])
+
+  // useEffect(() => {
+  //   async function getAnimeCompleted(){
+
+  //     try{
+  //       const result = await Response("completed/1")
+  //       setAnimeCompleted(result)
+  //     }catch(e){
+  //       console.log(e)
+  //     }
+  //   }
+  //   getAnimeCompleted()
+  // })
+
+  // useEffect(() =>{
+  //   async function getAnimeAction(){
+      
+  //     try{
+  //       const result = await Response('genre/action')
+  //       setAnimeAction(result);
+  //     }catch(e){
+  //       console.log(e);
+  //     }
+
+  //     getAnimeAction()
+  //   }
+  // })
+  
 
 
   //bagian home
   return (
-    <div>
-      <Navbar setEndpoint={setEndpoint} setPage={setPage} setLoading={setLoading}/>
-
-      <Page completed = {completed} data={data} endpoint={endpoint} setEndpoint={setEndpoint} setPage={setPage} loading={loading} setLoading={setLoading} genres={genres}/>
-        {/* {loading ?
-        <Container>
-          {row}
-        </Container>
-          :
-          <>
-          </>
-        } */}
-
-
-
-      <Footer />
-    </div>
-  )
-
-
-}
-
-
-function GenreList({genres}){
-   return(
-    <div className="w-60 sticky top-0 scrollbar scrollbar-thumb-rounded-full scrollbar-track-rounded-full overflow-y-scroll h-screen">
-    <h1 className="sticky bg-red-900 p-5 font-black text-white top-0">Genre List</h1>
-
-    <ul className="bg-white">
-      {genres.map((genre) =>{
-        return(
-
-          <li className="p-3">{genre.genre}</li>
-        )
-      })}
-    </ul>
-    </div>
-   )
-}
-
-function Page({ endpoint, data, setEndpoint, setPage, setLoading, completed, genres, loading }) {
-  return (
-    <>
-      {/* menampilkan anime list */}
-      {(endpoint == 'ongoing' || endpoint == 'completed') &&
-      <>
-
-      <Jumbotron/>
-
+    <div className="bg-slate-950">
       <div className="flex">
-        <GenreList genres={genres} />
-        <Container>
-
-          <Header judul='Ongoing' />
-          <Content data={data} endpoint={endpoint} setEndpoint={setEndpoint} setPage={setPage} loading={loading} setLoading={setLoading}/>
-
-          <Header judul='Completed' />
-
-        <Content data={completed} endpoint={'completed'} setEndpoint={setEndpoint} setPage={setPage} loading={loading} setLoading={setLoading}/>
-        </Container>
+      <SideBar items={animeGenre.genres} title={'Genre List'} list={'genre'} />
+      <Container>
+        <Jumbotron/>
+        {/* <Header judul={'Action'} />
+        <Cardxl data={animeAction.genreAnime} /> */}
+        <Header judul = 'Latest'/>
+        <Content data={animeOngoing.ongoing} total={12}/>
+        <Header judul = 'Completed'/>
+        <Content data={animeCompleted.completed} total={12}/>
+      </Container>
       </div>
-
-
-
-      </>
-
-      }
-
-      {
-        endpoint == 'detail' &&
-        <Container>
-        <AnimeDetail animesDetail={data}/>
-        </Container>
-      }
-
-      {/* display searching anime */}
-      {
-        endpoint == 'search' &&
-        <Container>
-
-        <Content data={data} endpoint={endpoint} setEndpoint={setEndpoint} setPage={setPage} setLoading={setLoading}/>
-        </Container>
-      }
-    </>
+    </div>
   )
+
+
 }
+
 function Container({ children }) {
   return (
-    <div className="anime w-5/6 text-white flex items-center flex-wrap justify-center w-full min-h-screen">
+    <div className="w-5/6 text-white flex relative flex-row min-h-screen justify-between flex-wrap">
       {children}
     </div>
   )

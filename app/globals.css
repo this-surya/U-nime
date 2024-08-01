@@ -17,14 +17,7 @@
 }
 
 body{
-  background-image: url('../public/9259834.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
   position: relative;
   min-height: 100vh;
-}
-
-.anime{
-  background: rgba(60, 60, 60, .7);
 }
 
