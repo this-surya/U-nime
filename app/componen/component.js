@@ -73,8 +73,8 @@ export function SideBar({items, title, list, setSlug, episodeActive}){
        {items.map((item, index) =>{
          if(list == 'genre'){
           return(
-            <Link href={`genres/${item.endpoint}`}>
-             <li key={index} className="p-3 cursor-pointer hover:bg-blue-500 border-2 border-black border-b-gray-400">{item.genre}</li>
+            <Link href={`genres/${item.url}`}>
+             <li key={index} className="p-3 cursor-pointer hover:bg-blue-500 border-2 border-black border-b-gray-400">{item.name}</li>
             </Link>
           )
          }
@@ -120,8 +120,10 @@ export function Content({ data, total }) {
     // alert(split[3]);
   }
 
-  return data.slice(0, total).map((anime, index) => {
+  return data.map((anime, index) => {
     const getAnimeEndpoint = (anime.endpoint == undefined) ? anime.link : anime.endpoint;
+
+    if(index > 17) return null;
 
       return (
         <div key={index} className="relative  transition ease-in-out
@@ -129,9 +131,9 @@ export function Content({ data, total }) {
        
         onClick={() => {handleClick(getAnimeEndpoint)}}>
 
-          <img src={anime.thumb} />
-          <p className="absolute opacity-80 top-0 bg-black text-white p-1">{anime.total_episode}</p>
-        <p className="absolute opacity-80 top-8 bg-black text-white p-1">{anime.updated_on}</p>
+          <img className="h-full" src={anime.entry.images.webp.large_image_url} />
+          {/* <p className="absolute opacity-80 top-0 bg-black text-white p-1">{anime.type}</p>
+        <p className="absolute opacity-80 top-8 bg-black text-white p-1">{anime.rating}</p> */}
         {/* {endpoint === 'completed' &&
         <p className="absolute opacity-80 bottom-20 right-0 bg-blue-500 text-white p-1">&#9733;{anime.score}</p>
       }
@@ -140,7 +142,7 @@ export function Content({ data, total }) {
     } */}
           <h1 className="w-full absolute bottom-0 py-2 
           opacity-80 text-white bg-black z-10 truncate">
-            {anime.title.slice(0, 16)}
+            {anime.entry.title}
           </h1>
         </div>
       )

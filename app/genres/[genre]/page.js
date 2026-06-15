@@ -11,7 +11,7 @@ export default function Page(params){
     useEffect(() =>{
         async function getAnimeGenres(){
             try{
-                const result = await Response(`genres/${params.params.genre}/${page}`)
+                const result = await Response(`genres/${params.params.name}/${page}`)
                 setAnimeGenre(result)
             }catch(e){
                 console.log(e);

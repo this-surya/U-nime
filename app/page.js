@@ -8,10 +8,11 @@ import  {
 export default async function Home() {
 
 
-  const animeGenre = await Response("genres")
-  const animeOngoing = await Response("ongoing/1")
-  const animeCompleted = await Response("completed/1")
-  const animeAction = await Response("genres/action/1");
+  const animeGenre = await Response("genres/anime");
+  // const animeOngoing = await Response("ongoing/1");
+  const animeRecomendation = await Response("anime/20/recommendations/");
+  // console.log(animeRecomendation.data);
+  // const animeAction = await Response("genres/action/1");
 
   // const [animeGenre, setAnimeGenre] = useState([])
   // const [animeOngoing, setAnimeOngoing] = useState([])
@@ -79,15 +80,16 @@ export default async function Home() {
   return (
     <div className="bg-slate-950">
       <div className="flex">
-      <SideBar items={animeGenre.genres} title={'Genre List'} list={'genre'} />
+      <SideBar items={animeGenre.data} title={'Genre List'} list={'genre'} />
       <Container>
         <Jumbotron/>
         {/* <Header judul={'Action'} />
         <Cardxl data={animeAction.genreAnime} /> */}
-        <Header judul = 'Latest'/>
-        <Content data={animeOngoing.ongoing} total={12}/>
-        <Header judul = 'Completed'/>
-        <Content data={animeCompleted.completed} total={12}/>
+        <Header judul = 'Recommendation'/>
+        <Content data={animeRecomendation.data} total={12}/>
+
+        {/* <Header judul = 'Completed'/> */}
+        {/* <Content data={animeCompleted.completed} total={12}/> */}
       </Container>
       </div>
     </div>

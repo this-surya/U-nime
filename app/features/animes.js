@@ -3,7 +3,7 @@ import { axiosInstace } from "../lib/axios";
 
 
 export const Response = async (url) => {
-    const apiRes = await axiosInstace.get(`https://otakudesu-anime-api.vercel.app/api/v1/${url}`)
+    const apiRes = await axiosInstace.get(`https://api.jikan.moe/v4/${url}`)
 
 
     if(!apiRes.ok){
